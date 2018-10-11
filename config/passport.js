@@ -1,6 +1,7 @@
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../app/models/user');
-
+var Cart = require('../app/models/cartmodel');
+var uniqid = require('uniqid')
 module.exports = function(passport) {
 
     passport.serializeUser(function(user, done) {
@@ -19,9 +20,6 @@ module.exports = function(passport) {
             passReqToCallback: true
         },
         function(req, email, password, done) {
-            console.log(req.body)
-            console.log(email)
-            console.log(password)
 
             process.nextTick(function() {
 
@@ -36,15 +34,25 @@ module.exports = function(passport) {
                         return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                     } else {
 
+                        var uid = uniqid('loyalty-')
+
                         var newUser = new User();
                         newUser.email = email;
                         newUser.password = newUser.generateHash(password);
                         newUser.firstname = req.body.name
                         newUser.lastname = req.body.lastname
-                        
+                        newUser.loyaltytracker = uid
+
+                        var cart = new Cart();
+                        cart.loyaltytracker = uid
+                        cart.cart = ["0"]
+
+                        cart.save()
+
                         newUser.save(function(err) {
                             if (err)
                                 throw err;
+                            console.log(newUser)
                             return done(null, newUser);
                         });
                     }
@@ -56,25 +64,26 @@ module.exports = function(passport) {
         }));
 
     passport.use('local-login', new LocalStrategy({
-        usernameField : 'email',
-        passwordField : 'password',
-        passReqToCallback : true
-    },
-    function(req, email, password, done) {
+            usernameField: 'email',
+            passwordField: 'password',
+            passReqToCallback: true
+        },
+        function(req, email, password, done) {
 
-        User.findOne({ 'email' :  email }, function(err, user) {
-            if (err)
-                return done(err);
+            User.findOne({
+                'email': email
+            }, function(err, user) {
+                if (err)
+                    return done(err);
 
-            if (!user)
-                return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                if (!user)
+                    return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
 
-            if (!user.validPassword(password))
-                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+                if (!user.validPassword(password))
+                    return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
-            return done(null, user);
-        });
-    }));
+                return done(null, user);
+            });
+        }));
 
 };
-

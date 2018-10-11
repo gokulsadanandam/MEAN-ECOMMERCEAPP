@@ -1,0 +1,30 @@
+html, body {
+     height: 100%;
+     font-family: 'Roboto Condensed', sans-serif;
+}
+ .container-fluid, .row {
+     height: 100% 
+}
+ .nav {
+     padding: 0px 
+}
+ .navoptions {
+     float: right;
+     text-transform: uppercase;
+}
+ .navbar {
+     text-align: center;
+}
+ .navbar strong {
+     font-size: 20px;
+     text-transform: uppercase;
+}
+ .form h1 {
+     text-align: center;
+     text-transform: uppercase;
+     padding: 5px;
+     color: #777;
+}
+ .button {
+     text-align: center;
+}
