@@ -50,5 +50,29 @@ myApp.service('api', function($http) {
         })
     }
 
+    this.getuserimagepath = function(){
+
+        return $http({
+            method:'GET',
+            url:'/api/userimage'
+        }).then(function(data){
+                return data
+        })
+
+    }
+
+    this.userorders = function(){
+
+        return $http({
+            method:'GET',
+            url:'/api/userorders'
+        }).then(function(data){
+            return data
+        })
+
+
+    }
+
+
 
 })

@@ -14,6 +14,15 @@ myApp.config(function($routeProvider) {
             templateUrl: '/partials/payment.html',
             controller: 'payment'
         })
+        .when('/profile',{
+            templateUrl:'/partials/profile.html',
+            controller:'profile',
+            resolve:{
+                profile:function(api){
+                    return api.getuserimagepath()
+                } 
+            }
+        })
         .otherwise({
             templateUrl: '/partials/offers.html',
             controller: 'offers'

@@ -6,7 +6,10 @@ var userschema = new mongoose.Schema({
     "lastname": String,
     "email": String,
     "password": String,
-    "loyaltytracker": String
+    "loyaltytracker": String,
+    "filepath":String,
+    "contact":String,
+    "registertime":String
 })
 
 

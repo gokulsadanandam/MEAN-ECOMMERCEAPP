@@ -19,6 +19,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="/css/custom/dashboard.css">
     <link rel="stylesheet" type="text/css" href="/css/custom/offer.css">
+    <link rel="stylesheet" type="text/css" href="/css/custom/profile.css">
     <link rel="stylesheet" type="text/css" href="/css/custom/cart.css">
     <link rel="stylesheet" type="text/css" href="/css/custom/payment.css">
 
@@ -39,12 +40,14 @@
 
     <!-- Custom JS -->
     <script src="/js/custom/main.js"></script>
+    <script src="/directives/filemodel.js"></script>
     <script src="/services/apiservices.js"></script>
     <script src="/services/cart.js"></script>
     <script src="/services/data.js"></script>
     <script src="/js/custom/offers.js"></script>
     <script src="/js/custom/cartcontroller.js"></script>
     <script src="/js/custom/payment.js"></script>
+    <script src="/js/custom/profile.js"></script>
 
 </head>
 
@@ -56,8 +59,13 @@
             <div class="container-fluid">
 
                 <div class="navbar-brand nav-options mycart">
-                    <a href="/logout" class="btn">
+                    <a onclick="logout()" class="btn">
                         <span>Logout</span>
+                    </a>
+                </div>
+                <div class="navbar-brand nav-options mycart">
+                    <a href="#!/profile" class="btn">
+                        <span>My Profile</span>
                     </a>
                 </div>
                 <div class="navbar-brand nav-options mycart">
@@ -74,7 +82,7 @@
                     <%=user %>
                 </p>
         </nav>
-
+        </div>
 
 
         <section class="content">
@@ -104,13 +112,18 @@
         </div>
 
         <script>
-            var uid = document.getElementById('uid').innerHTML
-            var cart = document.getElementById('cart').innerHTML
+            var uid = document.getElementById('uid').innerHTML.trim()
+            var cart = document.getElementById('cart').innerHTML.trim()
 
             sessionStorage.setItem("uid", uid);
 
             if (cart != "0") {
                 sessionStorage.setItem("cart", cart);
+            }
+
+            var logout = function(){
+                sessionStorage.clear()                
+                window.location = "/logout"
             }
         </script>
 

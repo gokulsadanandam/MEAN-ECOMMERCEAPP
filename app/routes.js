@@ -1,5 +1,21 @@
 var Cart = require('../app/models/cartmodel');
 var Order = require('../app/models/order');
+var User = require('../app/models/user')
+var uniqid = require('uniqid')
+
+var multer = require('multer');
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads')
+    },
+    filename: (req, file, cb) => {
+        let extension = file.mimetype.split("/")[1]
+        var filename = req.user.loyaltytracker + "." + extension
+      cb(null, filename)
+    }
+});
+var upload = multer({storage: storage});
+
 
 module.exports = function(app, passport) {
 
@@ -51,7 +67,6 @@ module.exports = function(app, passport) {
         failureFlash: true
     }))
 
-
     app.post('/api/usercart', isLoggedIn, function(req, res) {
 
         let data = {
@@ -88,12 +103,56 @@ module.exports = function(app, passport) {
         })
     })
 
+    app.post('/test',upload.single('file') , function(req,res,file){
+        
+        file = {
+            "filepath" : req.file.filename
+        }
+        User.findOneAndUpdate({"loyaltytracker":req.user.loyaltytracker},{$set:file},{upsert:true},function(err,doc){
+            res.send("success!")
+        })
+
+    })
+
+    app.get('/api/userimage',isLoggedIn,function(req,res){
+        User.findOne({"loyaltytracker":req.user.loyaltytracker},function(err,docs){
+            if(err) throw err;
+            if(docs.filepath){
+                res.send([docs.filepath,docs.loyaltytracker,docs.email,docs.firstname,docs.lastname,docs.contact,docs.registertime])
+            }
+            else{
+                res.send([null,docs.loyaltytracker,docs.email,docs.firstname,docs.lastname,docs.contact,docs.registertime])
+            }
+        })        
+    })
+
+    app.get('/api/userorders',function(req,res){
+        Order.find({"loyaltytracker":req.user.loyaltytracker},function(err,docs){
+            let orders = [], iterator = 0
+            docs.forEach(function(data){
+                orders.push(data.order)
+                iterator++;
+            })
+            if(iterator==(docs.length)){
+                res.send(orders)
+            }
+        })        
+    })
+
     app.post('/api/order', isLoggedIn, function(req, res) {
 
-        order = new Order()
-        order.loyaltytracker = req.user.loyaltytracker
-        order.order = req.body
-        order.save()
+        let orders = req.body[0],
+            address = req.body[1]
+
+        orders.forEach(function(data){
+            order = new Order()
+            order.loyaltytracker = req.user.loyaltytracker
+            order.order = data
+            order.address = address
+            order.id = uniqid.time()
+            order.save()
+        }) 
+
 
     })
 

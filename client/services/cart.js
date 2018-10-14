@@ -34,12 +34,15 @@ myApp.service('cart', function() {
 
     this.usersavedcart = function() {
         let cart = sessionStorage.getItem("cart");
-        cart = cart.split(",")
+        if(cart){
+         cart = cart.split(",")
         let i = 0;
         while ((i < (cart.length)) && (cart.length > 2)) {
             this.cart.push(cart.slice(i, i + 6))
             i = i + 6
+        }     
         }
+       
     }
 
     this.usersavedcart()

@@ -27,8 +27,8 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Your Order Details</h4>
                 </div>
-                <div class="modal-body" ng-show="flag" ng-repeat="items in finalcart track by $index">
-                    <div class="row">
+                <div class="modal-body">
+                    <div class="row" ng-show="flag" ng-repeat="items in finalcart track by $index">
                         <div class="col-md-6">
                             <h3>Product {{$index + 1}}</h3>
                             <ul>
@@ -44,13 +44,13 @@
                         <div class="col-md-6">
                             <img src="{{items[3]}}" class="img-responsive">
                         </div>
-                        <div class="col-md-12">
+                    </div>
+                     <div class="col-md-12" ng-show="flag">
                             <div class="form-group">
-                                <label for="address">Enter Shipping Address:</label>
+                                <br>
                                 <textarea class="form-control" rows="5" id="address" placeholder="Enter Shipping Address"></textarea>
                             </div>
                         </div>
-                    </div>
 
                 </div>
                 <div class="modal-body" ng-show="!flag">
@@ -69,7 +69,10 @@
             <div class="modal-content order-modal">
                 <h2> You Order is Placed Successfully.</h2>
                 <div class="ordered">
-                    <button type="button" class="btn button-modal" data-dismiss="modal">Continue Shopping</button>
+                    
+  
+             <a href="https://www.facebook.com/sharer/sharer.php?u=example.org" target="_blank"><button type="button" class="btn button-modal">Share on Facebook</button></a>   
+                    <button type="button" class="btn button-modal" data-dismiss="modal">Continue Shopping     </button>
                 </div>
             </div>
         </div>

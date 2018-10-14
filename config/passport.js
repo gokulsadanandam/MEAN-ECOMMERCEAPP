@@ -2,6 +2,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var User = require('../app/models/user');
 var Cart = require('../app/models/cartmodel');
 var uniqid = require('uniqid')
+
 module.exports = function(passport) {
 
     passport.serializeUser(function(user, done) {
@@ -20,11 +21,11 @@ module.exports = function(passport) {
             passReqToCallback: true
         },
         function(req, email, password, done) {
-
+            // console.log(req)
             process.nextTick(function() {
 
                 User.findOne({
-                    'email': email
+                    'email': req.body.email
                 }, function(err, user) {
 
                     if (err)
@@ -33,7 +34,6 @@ module.exports = function(passport) {
                     if (user) {
                         return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                     } else {
-
                         var uid = uniqid('loyalty-')
 
                         var newUser = new User();
@@ -42,7 +42,9 @@ module.exports = function(passport) {
                         newUser.firstname = req.body.name
                         newUser.lastname = req.body.lastname
                         newUser.loyaltytracker = uid
-
+                        newUser.contact = req.body.number
+                        let date = new Date()
+                        newUser.registertime = date.toDateString() 
                         var cart = new Cart();
                         cart.loyaltytracker = uid
                         cart.cart = ["0"]
@@ -52,7 +54,6 @@ module.exports = function(passport) {
                         newUser.save(function(err) {
                             if (err)
                                 throw err;
-                            console.log(newUser)
                             return done(null, newUser);
                         });
                     }
