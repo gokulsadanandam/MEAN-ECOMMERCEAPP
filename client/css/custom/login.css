@@ -1,9 +1,19 @@
 html, body {
      height: 100%;
-     font-family: 'Roboto Condensed', sans-serif;
+     font-family: 'Roboto', sans-serif;
 }
  .container-fluid, .row {
      height: 100% 
+}
+.container-fluid{
+    background-image: url(/images/login-bg.gif);
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    background-position: left;
+    background-color: #E3E3E3
+}
+.overlay{
+     background:rgb(0,0,0,0.5);
 }
  .nav {
      padding: 0px 
@@ -21,13 +31,4 @@ html, body {
 }
  .form {
      margin: 50px 0px 0px 0px;
-}
- .form h1 {
-     text-align: center;
-     text-transform: uppercase;
-     padding: 10px;
-     color: #777;
-}
- .button {
-     text-align: center;
 }
